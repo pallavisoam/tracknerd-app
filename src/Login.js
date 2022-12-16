@@ -4,16 +4,20 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Input } from 'antd'
 
 const Login = () => {
-    const [ username, setUsername ] = useState('jeewan.thapa9@gmail.com')
+    const [ username, setUsername ] = useState('ganesh@arvee.co.in')
     const [ password, setPassword ] = useState('tracknerd@123')
     const navigate = useNavigate()
     const handleUserLogin = async () => {
-        axios({
+        await axios({
             method: 'post',
             url: `https://staging-api.tracknerd.io/v1/auth/login`,
             data: {
                 username: username,
                 password: password
+            },
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
             }
         })
             .then((res) => {

@@ -10,16 +10,20 @@ const UserList = () => {
     const [ filteredData, setFilteredData ] = useState([])
     const [ loading, setLoading ] = useState(true)
     const [ searchValue, setSearchValue ] = useState('')
+    const [ locArr, setLocArr ] = useState([])
     const navigate = useNavigate()
     useEffect(() => {
         if (loading) {
             getApiVehicleData()
+            // getVehicleLocation()
         }
     }, [])
 
     const getVehicleLocation = (vehicleId, vehicleRegNo) => {
         database.ref(`${vehicleId}-${vehicleRegNo}/location`).on('value', (dataSnapshot) => {
-            console.log('location data is', dataSnapshot.val())
+            if (dataSnapshot.val() !== undefined && dataSnapshot.val() !== null) {
+                setLocArr((prev) => [ ...prev, dataSnapshot.val() ])
+            }
         })
     }
 
@@ -36,6 +40,9 @@ const UserList = () => {
                 console.log('list of vehicles is', res, res.data)
                 setVehiclesArr(res.data.data[0].vehicles)
                 setFilteredData(res.data.data[0].vehicles)
+                res.data.data[0].vehicles.forEach((vehicle) => {
+                    getVehicleLocation(vehicle.id, vehicle.registrationNumber)
+                })
                 setLoading(false)
             })
             .catch((err) => {
@@ -133,7 +140,7 @@ const UserList = () => {
                             </li>
                         ))}
                     </ul>
-                    <GoogleMap />
+                    <GoogleMap locArr={locArr} />
                 </div>
             )}
         </div>

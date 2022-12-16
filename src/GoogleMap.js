@@ -1,7 +1,7 @@
 import React from 'react'
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react'
 
-const GoogleMap = () => {
+const GoogleMap = ({ locArr }) => {
     const mapStyles = {
         width: '50%',
         height: '50%',
@@ -9,9 +9,25 @@ const GoogleMap = () => {
     }
     return (
         <div>
-            {' '}
-            <Map google={window.google} zoom={8} style={mapStyles} initialCenter={{ lat: 47.444, lng: -122.176 }}>
-                <Marker position={{ lat: 48.0, lng: -122.0 }} />
+            <Map
+                google={window.google}
+                zoom={8}
+                style={mapStyles}
+                initialCenter={{
+                    lat: 12.8926883,
+                    lng: 77.566895
+                }}
+            >
+                {locArr.map((loc) => {
+                    return (
+                        <Marker
+                            position={{
+                                lat: loc.latitude,
+                                lng: loc.longitude
+                            }}
+                        />
+                    )
+                })}
             </Map>
         </div>
     )
